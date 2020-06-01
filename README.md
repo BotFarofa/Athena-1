@@ -5,7 +5,7 @@ Athena is a utility which generates the current Fortnite Item Shop into a styliz
 As seen on [@FNMasterCom](https://twitter.com/FNMasterCom/status/1197666123078160386?s=20)...
 
 <p align="center">
-    <img src="https://i.imgur.com/YXoesjJ.png" width="650px" draggable="false">
+    <img src="https://github.com/MyNameIsDark01/Athena/blob/master/itemshop.png" width="650px" draggable="false">
 </p>
 
 ## Requirements
