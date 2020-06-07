@@ -31,7 +31,6 @@ class Athena:
             itemShop = Utility.GET(
                 self,
                 "https://fortnite-api.com/v2/shop/br",
-                {"x-api-key": self.apiKey},
                 {"language": self.language},
             )
 
