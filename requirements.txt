@@ -1,0 +1,4 @@
+requests
+coloredlogs
+pillow
+python-twitter
