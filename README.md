@@ -10,6 +10,10 @@ As seen on [@FNMasterCom](https://twitter.com/FNMasterCom/status/119766612307816
 
 ## Requirements
 
+IF you want install all requirements in one click write this on shell:
+    `pip install -r requirements.txt` **(WINDOWS)**
+    `pip3 install -r requirements.txt` **(LINUX/UBUNTU)**
+    
 - [Python 3.7](https://www.python.org/downloads/)
 - [Requests](http://docs.python-requests.org/en/master/user/install/)
 - [coloredlogs](https://pypi.org/project/coloredlogs/)
