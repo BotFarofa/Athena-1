@@ -18,8 +18,6 @@ class Athena:
     """Fortnite Item Shop Generator."""
 
     def main(self):
-        print("Athena - Fortnite Item Shop Generator")
-        print("https://github.com/EthanC/Athena\n")
 
         initialized = Athena.LoadConfiguration(self)
 
@@ -52,7 +50,7 @@ class Athena:
     def LoadConfiguration(self):
         """
         Set the configuration values specified in configuration.json
-        
+
         Return True if configuration sucessfully loaded.
         """
 
@@ -105,9 +103,9 @@ class Athena:
         # Determine the max amount of rows required for the current
         # Item Shop when there are 3 columns for both Featured and Daily.
         # This allows us to determine the image height.
-        
+
         rows = max(ceil((len(featured)+len(specialFeatured)) / 3), ceil((len(daily)+len(specialDaily)) / 3))
-        
+
         shopImage = Image.new("RGB", (1920, ((545 * rows) + 340)))
 
         try:
@@ -148,7 +146,7 @@ class Athena:
 
         # Track grid position
         i = 0
-        
+
         for item in specialFeatured:
             card = Athena.GenerateCard(self, item)
 
@@ -163,7 +161,7 @@ class Athena:
                 )
 
                 i += 1
-                
+
         for item in featured:
             card = Athena.GenerateCard(self, item)
 
@@ -181,7 +179,7 @@ class Athena:
 
         # Reset grid position
         i = 0
-        
+
         for item in specialDaily:
             card = Athena.GenerateCard(self, item)
 
@@ -196,7 +194,7 @@ class Athena:
                 )
 
                 i += 1
-                
+
         for item in daily:
             card = Athena.GenerateCard(self, item)
 
