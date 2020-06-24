@@ -123,21 +123,12 @@ class Athena:
         canvas = ImageDraw.Draw(shopImage)
 
         watermark = ImageUtil.Font(self, 24)
-        text = "Powered by fortnite-api.com"
+        text = "Created by @EthanC\nUpdated by @MyNameIsDark01"
         canvas.text(
             (10, 10),
             text,
             (255, 255, 255),
             font=watermark,
-        )
-        text = "Created by @EthanC\nUpdated by @MyNameIsDark01"
-        textWidth, _ = watermark.getsize(text)
-        canvas.text(
-            (1630, 10),
-            text,
-            (255, 255, 255),
-            font=watermark,
-            align="right"
         )
 
         font = ImageUtil.Font(self, 48)
