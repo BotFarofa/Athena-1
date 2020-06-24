@@ -29,6 +29,7 @@ Open `configuration_example.json` in your preferred text editor, fill the config
 
 - `delayStart`: Set to `0` to begin the process immediately
 - `language`: Set the language for the Item Shop data ([Supported Languages](https://fortnite-api.com/documentation))
+- `date_language`: Set the language for the date above the items ([Supported Languages(https://py-googletrans.readthedocs.io/en/latest/#googletrans-languages))
 - `supportACreator`: Leave blank to omit the Support-A-Creator tag section of the Tweet
 - `twitter`: Set `enabled` to `false` if you wish for `itemshop.png` to not be Tweeted
 

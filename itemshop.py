@@ -8,6 +8,8 @@ import coloredlogs
 import twitter
 from PIL import Image, ImageDraw
 
+import googletrans
+from googletrans import Translator
 from util import ImageUtil, Utility
 
 log = logging.getLogger(__name__)
@@ -28,17 +30,18 @@ class Athena:
 
             itemShop = Utility.GET(
                 self,
-                "https://fortnite-api.com/v2/shop/br",
+                "https://fortnite-api.com/v2/shop/br/combined",
                 {"language": self.language},
             )
 
             if itemShop is not None:
                 itemShop = json.loads(itemShop)["data"]
 
-                # Strip time from the timestamp, we only need the date
-                date = Utility.ISOtoHuman(
+                # Strip time from the timestamp, we only need the date + translate in every language from googletrans
+                date = Translator().translate(Utility.ISOtoHuman(
                     self, itemShop["date"].split("T")[0], self.language
-                )
+                ), str = 'en', dest= self.date_language).text
+
                 log.info(f"Retrieved Item Shop for {date}")
 
                 shopImage = Athena.GenerateImage(self, date, itemShop)
@@ -60,6 +63,7 @@ class Athena:
             self.delay = configuration["delayStart"]
             self.apiKey = configuration["fortniteAPI"]["apiKey"]
             self.language = configuration["language"]
+            self.date_language = configuration["date_language"]
             self.supportACreator = configuration["supportACreator"]
             self.twitterEnabled = configuration["twitter"]["enabled"]
             self.twitterAPIKey = configuration["twitter"]["apiKey"]
@@ -90,23 +94,13 @@ class Athena:
         else:
             daily = []
 
-        if itemShop["specialFeatured"] != None:
-            specialFeatured = itemShop["specialFeatured"]["entries"]
-        else:
-            specialFeatured = []
-
-        if itemShop["specialDaily"] != None:
-            specialDaily = itemShop["specialDaily"]["entries"]
-        else:
-            specialDaily = []
-
         # Determine the max amount of rows required for the current
         # Item Shop when there are 3 columns for both Featured and Daily.
         # This allows us to determine the image height.
 
-        rows = max(ceil((len(featured)+len(specialFeatured)) / 3), ceil((len(daily)+len(specialDaily)) / 3))
+        rows = max(ceil(len(featured) / 3), ceil(len(daily) / 3))
 
-        shopImage = Image.new("RGB", (1920, ((545 * rows) + 340)))
+        shopImage = Image.new("RGBA", (1920, ((545 * rows) + 340)))
 
         try:
             background = ImageUtil.Open(self, "background.png")
@@ -127,6 +121,25 @@ class Athena:
         )
 
         canvas = ImageDraw.Draw(shopImage)
+
+        watermark = ImageUtil.Font(self, 24)
+        text = "Powered by fortnite-api.com"
+        canvas.text(
+            (10, 10),
+            text,
+            (255, 255, 255),
+            font=watermark,
+        )
+        text = "Created by @EthanC\nUpdated by @MyNameIsDark01"
+        textWidth, _ = watermark.getsize(text)
+        canvas.text(
+            (1630, 10),
+            text,
+            (255, 255, 255),
+            font=watermark,
+            align="right"
+        )
+
         font = ImageUtil.Font(self, 48)
         textWidth, _ = font.getsize(date)
         canvas.text(
@@ -147,21 +160,6 @@ class Athena:
         # Track grid position
         i = 0
 
-        for item in specialFeatured:
-            card = Athena.GenerateCard(self, item)
-
-            if card is not None:
-                shopImage.paste(
-                    card,
-                    (
-                        (20 + ((i % 3) * (card.width + 5))),
-                        (315 + ((i // 3) * (card.height + 5))),
-                    ),
-                    card,
-                )
-
-                i += 1
-
         for item in featured:
             card = Athena.GenerateCard(self, item)
 
@@ -179,21 +177,6 @@ class Athena:
 
         # Reset grid position
         i = 0
-
-        for item in specialDaily:
-            card = Athena.GenerateCard(self, item)
-
-            if card is not None:
-                shopImage.paste(
-                    card,
-                    (
-                        (990 + ((i % 3) * (card.width + 5))),
-                        (315 + ((i // 3) * (card.height + 5))),
-                    ),
-                    card,
-                )
-
-                i += 1
 
         for item in daily:
             card = Athena.GenerateCard(self, item)
@@ -226,17 +209,23 @@ class Athena:
             rarity = item["items"][0]["rarity"]["value"]
             category = item["items"][0]["type"]["value"]
             price = item["finalPrice"]
-            if isinstance(item["items"][0]["images"]["featured"], dict):
+
+            if item["items"][0]["images"]["featured"] != None:
                 icon = item["items"][0]["images"]["featured"]
             else:
                 icon = item["items"][0]["images"]["icon"]
+
+            # Select bundle image and name
             if item["bundle"] != None:
                 name = item["bundle"]["name"]
                 icon = item["bundle"]["image"]
+
         except Exception as e:
             log.error(f"Failed to parse item {name}, {e}")
 
             return
+
+        # Should be outdated
 
         if rarity == "frozen":
             blendColor = (148, 223, 255)

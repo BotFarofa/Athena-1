@@ -4,6 +4,7 @@
         "apiKey": "you don't have to express"
     },
     "language": "en",
+	"date_language": "en"
     "supportACreator": "YourSupportACreatorCode",
     "twitter": {
         "enabled": true,
