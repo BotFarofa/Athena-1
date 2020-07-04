@@ -40,7 +40,7 @@ class Athena:
                 # Strip time from the timestamp, we only need the date + translate in every language from googletrans
                 date = Translator().translate(Utility.ISOtoHuman(
                     self, itemShop["date"].split("T")[0], self.language
-                ), str = 'en', dest= self.date_language).text
+                ), dest= self.date_language).text
 
                 log.info(f"Retrieved Item Shop for {date}")
 
