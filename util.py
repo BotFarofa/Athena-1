@@ -35,11 +35,6 @@ class Utility:
         """Return the provided ISO8601 timestamp in human-readable format."""
 
         try:
-            locale.setlocale(locale.LC_ALL, language)
-        except locale.Error:
-            log.warn(f"Unsupported locale configured, using system default")
-
-        try:
             # Unix-supported zero padding removal
             return datetime.strptime(date, "%Y-%m-%d").strftime("%A, %B %-d, %Y")
         except ValueError:

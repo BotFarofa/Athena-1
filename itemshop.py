@@ -40,7 +40,7 @@ class Athena:
                 # Strip time from the timestamp, we only need the date + translate in every language from googletrans
                 date = Translator().translate(Utility.ISOtoHuman(
                     self, itemShop["date"].split("T")[0], self.language
-                ), dest= self.date_language).text
+                ), str = 'en', dest= self.date_language).text
 
                 log.info(f"Retrieved Item Shop for {date}")
 
@@ -123,12 +123,21 @@ class Athena:
         canvas = ImageDraw.Draw(shopImage)
 
         watermark = ImageUtil.Font(self, 24)
-        text = "Created by @EthanC\nUpdated by @MyNameIsDark01"
+        text = "Powered by fortnite-api.com"
         canvas.text(
             (10, 10),
             text,
             (255, 255, 255),
             font=watermark,
+        )
+        text = "Created by @EthanC\nUpdated by @MyNameIsDark01"
+        textWidth, _ = watermark.getsize(text)
+        canvas.text(
+            (1630, 10),
+            text,
+            (255, 255, 255),
+            font=watermark,
+            align="right"
         )
 
         font = ImageUtil.Font(self, 48)
